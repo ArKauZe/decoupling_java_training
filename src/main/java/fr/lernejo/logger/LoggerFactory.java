@@ -1,8 +1,12 @@
 package fr.lernejo.logger;
 
-//Créer enfin une classe LoggerFactory ayant une méthode publique et statique getLogger(String name) retournant un objet de type Logger (c’est-à-dire implémentant l’interface Logger).
+import java.util.function.Predicate;
 public class LoggerFactory {
     public static Logger getLogger(String name) {
-        return new ConsoleLogger();
+        Predicate<String> condition = message -> message.contains("simulation");
+        return new ContextualLogger(name,
+            new CompositeLogger(new ConsoleLogger(),
+                new FilteredLogger(new FileLogger("logs"), condition)));
+
     }
 }
